@@ -18,10 +18,10 @@ namespace AddressBook.UI.Main
         private readonly IExportServiceFactory _exportServiceFactory;
 
         private ObservableCollection<Entry> _entries;
-        private ICommand _ImportCommand;
-        private ICommand _ExportToExcelCommand;
-        private ICommand _ExportToXmlCommand;
-        private ICommand _ApplyFilterCommand;
+        private ICommand _importCommand;
+        private ICommand _exportToExcelCommand;
+        private ICommand _exportToXmlCommand;
+        private ICommand _applyFilterCommand;
 
         public MainViewModel(
             ICsvService csvService,
@@ -34,86 +34,86 @@ namespace AddressBook.UI.Main
             Entries = new ObservableCollection<Entry>();
         }
 
-        private string _Date;
+        private string _date;
         public string Date
         {
             get
             {
-                return _Date;
+                return _date;
             }
             set
             {
-                _Date = value;
+                _date = value;
                 OnPropertyChanged();
             }
         }
         
-        private string _FirstName;
+        private string _firstName;
         public string FirstName
         {
             get
             {
-                return _FirstName;
+                return _firstName;
             }
             set
             {
-                _FirstName = value;
+                _firstName = value;
                 OnPropertyChanged();
             }
         }
 
-        private string _LastName;
+        private string _lastName;
         public string LastName
         {
             get
             {
-                return _LastName;
+                return _lastName;
             }
             set
             {
-                _LastName = value;
+                _lastName = value;
                 OnPropertyChanged();
             }
         }
 
-        private string _MiddleName;
+        private string _middleName;
         public string MiddleName
         {
             get
             {
-                return _MiddleName;
+                return _middleName;
             }
             set
             {
-                _MiddleName = value;
+                _middleName = value;
                 OnPropertyChanged();
             }
         }
 
-        private string _City;
+        private string _city;
         public string City
         {
             get
             {
-                return _City;
+                return _city;
             }
             set
             {
-                _City = value;
+                _city = value;
                 OnPropertyChanged();
             }
         }
 
-        private string _Country;
+        private string _country;
         public string Country
         {
             get
             {
-                return _Country;
+                return _country;
             }
             set
             {
-                _Country = value;
+                _country = value;
                 OnPropertyChanged();
             }
         }
@@ -123,8 +123,8 @@ namespace AddressBook.UI.Main
         {
             get
             {
-                _ImportCommand ??= new RelayCommand(param => this.LoadData());
-                return _ImportCommand;
+                _importCommand ??= new RelayCommand(param => this.LoadData());
+                return _importCommand;
             }
         }
 
@@ -132,8 +132,8 @@ namespace AddressBook.UI.Main
         {
             get
             {
-                _ExportToExcelCommand ??= new RelayCommand(param => this.ExportData("Excel"));
-                return _ExportToExcelCommand;
+                _exportToExcelCommand ??= new RelayCommand(param => this.ExportData("Excel"));
+                return _exportToExcelCommand;
             }
         }
 
@@ -141,8 +141,8 @@ namespace AddressBook.UI.Main
         {
             get
             {
-                _ExportToXmlCommand ??= new RelayCommand(param => this.ExportData("XML"));
-                return _ExportToXmlCommand;
+                _exportToXmlCommand ??= new RelayCommand(param => this.ExportData("XML"));
+                return _exportToXmlCommand;
             }
         }
 
@@ -150,8 +150,8 @@ namespace AddressBook.UI.Main
         {
             get
             {
-                _ApplyFilterCommand ??= new RelayCommand(param => this.RefreshData());
-                return _ApplyFilterCommand;
+                _applyFilterCommand ??= new RelayCommand(param => this.RefreshData());
+                return _applyFilterCommand;
             }
         }
 
