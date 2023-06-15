@@ -4,6 +4,8 @@ using AddressBook.Service.Impl;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,6 +21,7 @@ namespace AddressBook.UI.Main
         private ICommand _ImportCommand;
         private ICommand _ExportToExcelCommand;
         private ICommand _ExportToXmlCommand;
+        private ICommand _ApplyFilterCommand;
 
         public MainViewModel(
             ICsvService csvService,
@@ -30,6 +33,91 @@ namespace AddressBook.UI.Main
             _exportServiceFactory = exportServiceFactory;
             Entries = new ObservableCollection<Entry>();
         }
+
+        private string _Date;
+        public string Date
+        {
+            get
+            {
+                return _Date;
+            }
+            set
+            {
+                _Date = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        private string _FirstName;
+        public string FirstName
+        {
+            get
+            {
+                return _FirstName;
+            }
+            set
+            {
+                _FirstName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _LastName;
+        public string LastName
+        {
+            get
+            {
+                return _LastName;
+            }
+            set
+            {
+                _LastName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _MiddleName;
+        public string MiddleName
+        {
+            get
+            {
+                return _MiddleName;
+            }
+            set
+            {
+                _MiddleName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _City;
+        public string City
+        {
+            get
+            {
+                return _City;
+            }
+            set
+            {
+                _City = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _Country;
+        public string Country
+        {
+            get
+            {
+                return _Country;
+            }
+            set
+            {
+                _Country = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public ICommand ImportCommand
         {
@@ -58,6 +146,15 @@ namespace AddressBook.UI.Main
             }
         }
 
+        public ICommand ApplyFilterCommand
+        {
+            get
+            {
+                _ApplyFilterCommand ??= new RelayCommand(param => this.RefreshData());
+                return _ApplyFilterCommand;
+            }
+        }
+
         public ObservableCollection<Entry> Entries
         {
             get => _entries;
@@ -73,16 +170,36 @@ namespace AddressBook.UI.Main
         {
             var exportService = _exportServiceFactory.GetInstance(type);
             
-            await exportService.Export(_entryService.FindAll);
+            await exportService.Export(FindByPredicate);
             MessageBox.Show($"Exported to {type}");
         }
 
         private async void LoadData()
         {
-            Entries.Clear();
             _entryService.DeleteAll();
             await _csvService.ReadCsv<Entry>("data.csv", _entryService.AddAll);
-            await Util.ChunkedAction.Invoke(_entryService.FindAll, async items =>
+            await RefreshData();
+
+        }
+
+        private Task<List<Entry>> FindByPredicate(int skip, int take) {
+            var predicate = new Entry()
+            {
+                Date = Date,
+                FirstName = FirstName,
+                LastName = LastName,
+                MiddleName = MiddleName,
+                City = City,
+                Country = Country
+            };
+            return _entryService.FindAll(predicate, skip, take);
+        }
+
+        private async Task RefreshData()
+        {
+            Entries.Clear();
+
+            await Util.ChunkedAction.Invoke(FindByPredicate, async items =>
             {
                 foreach (var entry in items)
                 {
@@ -93,9 +210,6 @@ namespace AddressBook.UI.Main
                     });
                 }
             });
-
         }
-
-
     }
 }

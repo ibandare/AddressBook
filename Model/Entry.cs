@@ -13,24 +13,24 @@ namespace AddressBook.Model
         public int Id { get; set; }
 
         [Index(0)] 
-        public required string Date { get; set; }
+        public string? Date { get; set; }
 
         [Index(1)] 
-        public required string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Index(2)] 
-        public required string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Index(3)] 
-        public required string MiddleName { get; set; }
+        public string? MiddleName { get; set; }
 
         [Index(4)] 
-        public required string City { get; set; }
+        public string? City { get; set; }
 
         [Index(5)] 
-        public required string Country { get; set; }
+        public string? Country { get; set; }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return $"{Id} - {FirstName} {MiddleName} {City}";
         }

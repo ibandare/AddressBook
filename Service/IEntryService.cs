@@ -8,6 +8,6 @@ namespace AddressBook.Service
     {
         Task AddAll(IEnumerable<T> data);
         void DeleteAll();
-        Task<List<Entry>> FindAll(int skip = 0, int take = 100);
+        Task<List<Entry>> FindAll(Entry predicate, int skip = 0, int take = 100);
     }
 }
